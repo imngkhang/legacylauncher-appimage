@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+TL_BRAND=${TL_BRAND:-legacy}
+
+export PATH="${PATH}${PATH:+:}/usr/lib/extensions/vulkan/gamescope/bin:/usr/lib/extensions/vulkan/MangoHud/bin"
+export VK_LAYER_PATH="/usr/lib/extensions/vulkan/share/vulkan/implicit_layer.d/"
+
+exec java -jar /lib/legacy_launcher/bootstrap.jar \
+  --ignoreSelfUpdate \
+  --brand="$TL_BRAND" \
+  --packageMode=flatpak \
+  -- \
+  "$@"

@@ -1,0 +1,8 @@
+name: "Legacy Launcher"
+architectures:
+  x86_64:
+    - version: "@TL_VERSION_AMD64@"
+      url: "@TL_URL_AMD64@"
+      sha256: "@TL_SHA256_AMD64@"
+      size: "@TL_SIZE_AMD64@"
+  

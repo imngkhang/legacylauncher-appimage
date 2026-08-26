@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Legacy Launcher
+Comment=Legacy Launcher is a Minecraft Launcher
+Icon=legacylauncher
+Exec=/usr/bin/legacylauncher
+NoDisplay=false
+Categories=Game;PackageManager;
+StartupNotify=false
+Terminal=false
+Keywords=Minecraft;
+StartupWMClass=org-springframework-boot-loader-PropertiesLauncher
+PrefersNonDefaultGPU=true

@@ -1,0 +1,32 @@
+# AppImage builder working directories
+dist/
+*AppDir/
+*RunDir/
+
+# AppImage generated binaries & tools
+appimagetool
+runimage
+*.RunImage
+*.RunImage.zsync
+*.AppImage
+*.AppImage.zsync
+*.zsync
+runtime*
+appinfo*
+get-debloated-pkgs.*
+uruntime2appimage
+
+# Extra downloads & temporary files
+extra/
+*.jar
+
+# System & OS generated files
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.tmp
+
+# IDE / Editor files
+.vscode/
+.idea/
