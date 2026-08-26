@@ -14,6 +14,7 @@ runimage
 runtime*
 appinfo*
 get-debloated-pkgs.*
+*overlayfs*
 uruntime2appimage
 
 # Extra downloads & temporary files
