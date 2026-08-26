@@ -18,12 +18,14 @@
 set -euo pipefail
 
 MANIFEST_OUTPUT="manifest.yaml"
+RAW_REPO="${GITHUB_REPOSITORY:-$(git config --get remote.origin.url | sed -E 's|.*github\.com[:/ ]||; s|\.git$||; s|/*$||')}"
+REPO=$(echo "$RAW_REPO" | sed 's|\/|\||' | sed -E 's|^[^a-zA-Z0-9]+||')
 export ARCH="x86_64"
 export APP_NAME="LegacyLauncher"
 export DESKTOP="legacylauncher.desktop"
 export ICON="legacylauncher.png"
 export STARTUPWMCLASS="ru-turikhay-tlauncher-bootstrap-Bootstrap"
-export UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*-$ARCH.AppImage.zsync"
+export UPINFO="gh-releases-zsync|${REPO}|continuous|LegacyLauncher-Bootstrap-*-anylinux-"$ARCH".AppImage.zsync"
 export SHA256=$(grep -A 5 "x86_64:" "$MANIFEST_OUTPUT" | grep "sha256:" | sed -E 's/.*sha256:[[:space:]]*"([^"]*)".*/\1/')
 export SIZE=$(grep -A 5 "x86_64:" "$MANIFEST_OUTPUT" | grep "size:" | sed -E 's/.*size:[[:space:]]*//' | tr -d '"'\''')
 
