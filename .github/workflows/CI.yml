@@ -111,6 +111,12 @@ jobs:
             dist/LegacyLauncher-Bootstrap*anylinux*.AppImage*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete old continuous release
+        run: gh release delete continuous --yes || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       # Create a continuous release and upload the AppImage
       - name: Update continuous release
         uses: softprops/action-gh-release@v2
