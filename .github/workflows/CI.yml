@@ -73,10 +73,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repo
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       # Download the built AppImage artifact
       - uses: actions/download-artifact@v4
         with:
@@ -87,7 +83,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: "Version ${{ needs.check-and-build.outputs.app_version }}"
-          tag_name: "${{ needs.check-and-build.outputs.app_version }}"
+          tag_name: "v${{ needs.check-and-build.outputs.app_version }}"
           prerelease: false
           draft: false
           generate_release_notes: false
@@ -113,11 +109,6 @@ jobs:
             Please report issues in the [GitHub Issues](https://github.com/imngkhang/legacylauncher-appimage/issues).
           files: |
             dist/LegacyLauncher-Bootstrap*anylinux*.AppImage*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete old continuous release
-        run: gh release delete continuous --yes || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
