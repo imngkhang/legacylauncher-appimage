@@ -73,6 +73,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repo
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       # Download the built AppImage artifact
       - uses: actions/download-artifact@v4
         with:
