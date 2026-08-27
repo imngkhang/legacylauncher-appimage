@@ -93,7 +93,7 @@ jobs:
 
             ```bash
             # Download the AppImage
-            wget https://github.com/${{ github.repository }}/releases/download/${{ needs.check-and-build.outputs.app_version }}/LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+            wget https://github.com/${{ github.repository }}/releases/download/v${{ needs.check-and-build.outputs.app_version }}/LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
             
             # Install with Gear Lever
             flatpak run it.mijorus.gearlever --integrate LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
