@@ -55,11 +55,11 @@ run_install() {
 		libpulse lib32-libpulse
 	)
     # Update and install packages
-	echo '== checking for updates'
+	echo '== Checking for updates'
     rim-update
 	pac --needed --noconfirm -S "${INSTALL_PKGS[@]}"
     # Download debloat tool
-	echo '== debloating...'
+	echo '== Debloating...'
     EXTRA_PACKAGES="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/heads/main/useful-tools/get-debloated-pkgs.sh"
 	wget --retry-connrefused --tries=30 "$EXTRA_PACKAGES" -O ./get-debloated-pkgs.sh
 	chmod +x ./get-debloated-pkgs.sh
@@ -71,7 +71,7 @@ run_install() {
     BOOTSTRAP_SUCCESS=false
 
     for host in llaun.ch eu1.llaun.ch lln4.ru ru1.lln4.ru; do
-        echo "=== attempting to download from $host..."
+        echo "=== Attempting to download from $host..."
     
         # Download the boootstrap to temp folder, and check the checksum
         if wget --timeout=15 --tries=2 "https://$host/jar" -O "$TMP_JAR"; then
@@ -90,14 +90,14 @@ run_install() {
         mkdir -p /usr/lib/legacy_launcher
         mv "$TMP_JAR" /usr/lib/legacy_launcher/bootstrap.jar
         BOOTSTRAP_SUCCESS=true
-        echo "=== successfully downloaded and verified the .jar"
+        echo "=== Successfully downloaded and verified the .jar"
         break
         fi
     done
 
     # Cleanup if it fails
     rm -f "$TMP_JAR"
-	[[ "$BOOTSTRAP_SUCCESS" = false ]] && { echo "error when downloading bootstrap"; exit 1; }
+	[[ "$BOOTSTRAP_SUCCESS" = false ]] && { echo "Error when downloading bootstrap"; exit 1; }
 
     # Here is the core envs, to run the AppImage
 	cat <<- 'EOF' > "$RUNDIR/config/Run.rcfg"
@@ -116,7 +116,7 @@ run_install() {
 	RIM_AUTORUN=legacylauncher
 	EOF
     
-	echo "=== building the RunImage..."
+	echo "=== Building the RunImage..."
 	rim-shrink --all
 	rim-build -s legacylauncher.RunImage
 }
@@ -143,7 +143,7 @@ chmod +x ./AppDir/rootfs/usr/bin/legacylauncher
 # Build the AppImage
 
 mkdir -p "$DIST_DIR"
-echo "=== we are now building the AppImage..."
+echo "=== Building the AppImage..."
 export VERSION="$(grep -A 5 "x86_64:" "$MANIFEST_OUTPUT" | grep "version:" | sed -E 's/.*version:[[:space:]]*"([^"]*)".*/\1/')"
 # Naming it bootstrap because the launcher's jar is self downloaded
 export OUTNAME=LegacyLauncher-Bootstrap-v"$VERSION"-anylinux-"$ARCH".AppImage
@@ -153,6 +153,8 @@ chmod +x ./uruntime2appimage
 
 export ADD_PERMA_ENV_VARS='RIM_ALLOW_ROOT=1'
 ./uruntime2appimage --make-appimage
+
+chmod -x "$OUTNAME" 2>/dev/null || true
 
 mv ./*.AppImage "${DIST_DIR}/" 2>/dev/null || true
 mv ./*.AppImage.zsync "${DIST_DIR}/" 2>/dev/null || true

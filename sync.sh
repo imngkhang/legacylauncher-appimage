@@ -23,7 +23,7 @@ MANIFEST_TEMPLATE="manifest.yaml.in"
 MANIFEST_OUTPUT="manifest.yaml"
 
 # We will check the commands and template here
-for cmd in jq wget sha256sum sed curl; do
+for cmd in jq wget sha256sum sed curl grep; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     echo "Error: Required command '$cmd' is not installed." >&2
     exit 1
