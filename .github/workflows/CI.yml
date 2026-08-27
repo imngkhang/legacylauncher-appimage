@@ -1,0 +1,146 @@
+name: Release AppImages
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  # Run workflow every day at midnight and on manual trigger
+  schedule:
+    - cron: "0 0 * * *"  
+  workflow_dispatch: 
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.sync_check.outputs.should_release }}
+      app_version: ${{ steps.sync_check.outputs.app_version }}
+    # Checkout the repo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+          token: ${{ secrets.GITHUB_TOKEN }}
+      # Sync the version
+      - name: Sync and check 
+        id: sync_check
+        run: |
+          chmod a+x ./sync.sh 2>/dev/null || false
+          ./sync.sh
+          
+          # We will take the version here
+          
+          APP_VER=$(grep -A 5 "x86_64:" manifest.yaml | grep "version:" | sed -E 's/.*version:[[:space:]]*"([^"]*)".*/\1/' 2>/dev/null || echo "")
+          echo "app_version=${APP_VER}" >> $GITHUB_OUTPUT
+          
+          # If the tag already exists, we don't need to build or release
+          if git rev-parse "$APP_VER" >/dev/null 2>&1; then
+            echo "Tag $APP_VER already exists."
+            echo "should_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "New version detected ($APP_VER). Preparing to build."
+            echo "should_release=true" >> $GITHUB_OUTPUT
+
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            if [ -n "$(git status --porcelain)" ]; then
+              git add .
+              git commit -m "bot: Auto-update manifest to $APP_VER"
+              git push
+            fi
+          fi
+        # Here we will build the AppImage
+      - name: Build
+        if: steps.sync_check.outputs.should_release == 'true' || github.event_name == 'workflow_dispatch' 
+        run: |
+          # We must install zsync and turn off restrictions to build the AppImage
+          sudo apt install zsync
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          make -j$(nproc)
+        # Upload the built AppImage as an artifact
+      - name: Upload artifact
+        if: steps.sync_check.outputs.should_release == 'true' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: AppImage
+          path: 'dist'
+
+  release:
+    needs: [check-and-build]
+    if: needs.check-and-build.outputs.should_release == 'true'  || github.event_name == 'workflow_dispatch'
+    permissions: write-all
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download the built AppImage artifact
+      - uses: actions/download-artifact@v4
+        with:
+          name: AppImage
+          path: dist
+      # Create a versioned release and upload the AppImage
+      - name: Create versioned release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Version ${{ needs.check-and-build.outputs.app_version }}"
+          tag_name: "${{ needs.check-and-build.outputs.app_version }}"
+          prerelease: false
+          draft: false
+          generate_release_notes: false
+          make_latest: false
+          body: |
+            It is recommended to use [AM](https://github.com/ivan-hc/AM) or [Gear Lever](https://github.com/mijorus/gearlever) to manage and integrate the AppImage.
+
+            ```bash
+            # Download the AppImage
+            wget https://github.com/${{ github.repository }}/releases/download/continuous/LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+            
+            # Install with Gear Lever
+            flatpak run it.mijorus.gearlever --integrate LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+
+            # Or run it manually
+            chmod +x LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+            ./LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+            ```
+
+            *Note for AM users: The intrucsions to install the launcher is included in the README. You don't need to run the above commands.*
+            
+            ## Issues & Support
+            Please report issues in the [GitHub Issues](https://github.com/imngkhang/legacylauncher-appimage/issues).
+          files: |
+            dist/LegacyLauncher-Bootstrap*anylinux*.AppImage*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Create a continuous release and upload the AppImage
+      - name: Update continuous release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Continuous build"
+          tag_name: "continuous"
+          prerelease: false
+          draft: false
+          generate_release_notes: false
+          make_latest: true
+          body: |
+            It is recommended to use [AM](https://github.com/ivan-hc/AM) or [Gear Lever](https://github.com/mijorus/gearlever) to manage and integrate the AppImage.
+
+            ```bash
+            # Download the AppImage
+            wget https://github.com/${{ github.repository }}/releases/download/continuous/LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+            
+            # Install with Gear Lever
+            flatpak run it.mijorus.gearlever --integrate LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+
+            # Or run it manually
+            chmod +x LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+            ./LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
+            ```
+
+            *Note for AM users: The intrucsions to install the launcher is included in the README. You don't need to run the above commands.*
+            
+            ## Issues & Support
+            Please report issues in the [GitHub Issues](https://github.com/imngkhang/legacylauncher-appimage/issues).
+          files: |
+            dist/LegacyLauncher-Bootstrap*anylinux*.AppImage*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
