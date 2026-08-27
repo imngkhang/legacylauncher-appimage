@@ -45,6 +45,11 @@ VER=$(echo "$CONFIG_DATA" | jq -r '.bootstrap_java.version | split("+")[0]')
 
 echo "Version: $VER"
 
+if [[ -z "$VER" || "$VER" == "null" ]]; then
+    echo "Error: null version. Exiting..."
+    exit 1
+fi
+
 # Check if the manifest file needs to be regenerated
 NEED_MANIFEST_GEN=true
 if [[ -f "$MANIFEST_OUTPUT" ]]; then
