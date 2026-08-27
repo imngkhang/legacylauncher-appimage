@@ -34,7 +34,7 @@ all:
 
 # Check dependencies
 depends:
-	@for cmd in jq wget curl grep sha256sum stat; do \
+	@for cmd in jq wget curl grep sha256sum stat zsyncmake; do \
 		if ! command -v $$cmd >/dev/null 2>&1; then \
 			echo "Missing: $$cmd"; \
 		else \

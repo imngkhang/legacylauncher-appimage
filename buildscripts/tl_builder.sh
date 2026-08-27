@@ -32,7 +32,14 @@ export SIZE=$(grep -A 5 "x86_64:" "$MANIFEST_OUTPUT" | grep "size:" | sed -E 's/
 DIST_DIR="dist"
 URUNTIME="https://raw.githubusercontent.com/pkgforge-dev/Anylinux-AppImages/refs/heads/main/useful-tools/quick-sharun.sh"
 
-echo "=== Building AppImage for Legacy Launcher ==="
+echo "=== Building AppImage ==="
+
+for cmd in jq wget curl grep sha256sum stat zsyncmake; do \
+	if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "Error: Required command '$cmd' is not installed." >&2
+        exit 1
+    fi
+done
 
 if [[ ! -f "legacylauncher" ]] || [[ ! -f "legacylauncher.desktop" ]]; then
   echo "Error: Cannot found legacylauncher and/or legacylauncher.desktop file(s)" >&2
