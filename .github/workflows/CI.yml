@@ -6,7 +6,7 @@ concurrency:
 on:
   # Run workflow every day at midnight and on manual trigger
   schedule:
-    - cron: "0 0 * * *"  
+    - cron: "7 2 * * *"  
   workflow_dispatch: 
 
 jobs:
