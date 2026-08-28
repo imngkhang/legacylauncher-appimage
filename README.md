@@ -12,7 +12,7 @@ Legacy Launcher is created by turikhay, and is in no way affiliated with Mojang 
 
 This is an unofficial AppImage wrapper for Legacy Launcher (previously known as TL), that is built on top of [RunImage](https://github.com/VHSgunzo/runimage), the portable single-file Linux container in unprivileged user namespaces
 
-This includes the launcher's .jar file, and also, OpenJDK to run the launcher as well, **and it will also use the proprietary nvidia driver from the host**.
+Legacy Launcher is a Minecraft launcher that is stable, fast and simple. This includes the launcher's .jar file, and also, OpenJDK to run the launcher as well, **and it will also use the proprietary nvidia driver from the host**.
 
 ### So why did I build this f**king big sh\*t clanker, instead of just using the "Install Java manually" option on LL's site?
 
