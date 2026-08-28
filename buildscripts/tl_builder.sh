@@ -23,7 +23,7 @@ REPO=$(echo "$RAW_REPO" | sed 's|\/|\||' | sed -E 's|^[^a-zA-Z0-9]+||')
 export ARCH="x86_64"
 export APP_NAME="LegacyLauncher"
 export DESKTOP="legacylauncher.desktop"
-export ICON="legacylauncher.png"
+export ICON="legacylauncher.svg"
 export STARTUPWMCLASS="org-springframework-boot-loader-PropertiesLauncher"
 export UPINFO="gh-releases-zsync|${REPO}|continuous|LegacyLauncher-Bootstrap-*-anylinux-"$ARCH".AppImage.zsync"
 export SHA256=$(grep -A 5 "x86_64:" "$MANIFEST_OUTPUT" | grep "sha256:" | sed -E 's/.*sha256:[[:space:]]*"([^"]*)".*/\1/')
@@ -142,7 +142,7 @@ mv ./RunDir ./AppDir
 mv ./AppDir/Run ./AppDir/AppRun
 
 cp legacylauncher ./AppDir/rootfs/usr/bin/legacylauncher
-cp legacylauncher.png ./AppDir/rootfs/usr/share/icons/hicolor/128x128/
+cp legacylauncher.svg ./AppDir/rootfs/usr/share/icons/hicolor/scalable/apps/
 cp legacylauncher.desktop ./AppDir/rootfs/usr/share/applications/legacylauncher.desktop
 
 chmod +x ./AppDir/rootfs/usr/bin/legacylauncher
