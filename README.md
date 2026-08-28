@@ -49,11 +49,11 @@ I recommend using [Gear Lever](https://github.com/mijorus/gearlever) or [AM](htt
 If you are using [AM or AppMan](https://github.com/ivan-hc/AM), you can install using this command:
 - For AM:
   ```bash
-  # I will add to AM soon
+  am -i legacylauncher
   ```
 - For AppMan:
   ```bash
-  # I will add to AM soon
+  appman -i legacylauncher
   ```
 
 ### Build from source

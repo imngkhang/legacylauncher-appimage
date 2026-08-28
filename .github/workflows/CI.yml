@@ -104,7 +104,7 @@ jobs:
             ./LegacyLauncher-Bootstrap-v${{ needs.check-and-build.outputs.app_version }}-anylinux-x86_64.AppImage
             ```
 
-            *Note for AM users: The intrucsions to install the launcher is included in the README. You don't need to run the above commands.*
+            *Note for AM users: The intrucsions to install the launcher is included in [the README](https://github.com/imngkhang/legacylauncher-appimage/#install-the-appimage). You don't need to run the above commands.*
             
             ## Issues & Support
             Please report issues in the [GitHub Issues](https://github.com/imngkhang/legacylauncher-appimage/issues).
