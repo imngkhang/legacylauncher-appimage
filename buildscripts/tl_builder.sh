@@ -48,7 +48,7 @@ fi
 
 if [ ! -x 'runimage' ]; then
 	echo '=== Downloading RunImage base...'
-	wget -q -O runimage "https://github.com/VHSgunzo/runimage/releases/download/continuous/runimage-$ARCH"
+	wget -O runimage "https://github.com/VHSgunzo/runimage/releases/download/continuous/runimage-$ARCH"
 	chmod +x runimage
 fi
 
