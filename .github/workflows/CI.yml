@@ -34,18 +34,18 @@ jobs:
           echo "app_version=${APP_VER}" >> $GITHUB_OUTPUT
           
           # If the tag already exists, we don't need to build or release
-          if git rev-parse "$APP_VER" >/dev/null 2>&1; then
-            echo "Tag $APP_VER already exists."
+          if git rev-parse v"$APP_VER" >/dev/null 2>&1; then
+            echo "Tag v$APP_VER already exists."
             echo "should_release=false" >> $GITHUB_OUTPUT
           else
-            echo "New version detected ($APP_VER). Preparing to build."
+            echo "New version detected (v$APP_VER). Preparing to build."
             echo "should_release=true" >> $GITHUB_OUTPUT
 
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             if [ -n "$(git status --porcelain)" ]; then
               git add .
-              git commit -m "bot: Auto-update manifest to $APP_VER"
+              git commit -m "bot: Auto-update manifest to v$APP_VER"
               git push
             fi
           fi
