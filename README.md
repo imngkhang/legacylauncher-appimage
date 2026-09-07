@@ -33,8 +33,8 @@ Here is the screenshots of the launcher (it's comes from turikhay's official scr
 
 Before installing or building this package, ensure your system meets the following requirements:
 
-- **Linux**: 2.6.14 or later
-- **glibc**: ANY versions, because this is an Anylinux AppImage
+- **Linux**: ANY versions, because this is an *Anylinux AppImage*
+- **libc**: ANY, even musl or very old glibc
 - **Architecture**: `x86_64` **ONLY**
 - **Tools**: `jq`, `sha256sum`, `stat`, `wget`, `grep`, `make`, `zsyncmake`, from your distro
 - **Gear Lever** (*optional*): Lastest version from [Flathub](https://flathub.org/en/apps/it.mijorus.gearlever)
