@@ -78,6 +78,7 @@ jobs:
         with:
           name: AppImage
           path: dist  
+          retention-days: 30
 
       # Create a versioned release and upload the AppImage
       - name: Create versioned release
@@ -114,6 +115,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        
       # Create a continuous release and upload the AppImage
+      - name: Delete old continuous release
+        run: |
+          gh release delete continuous --yes --cleanup-tag || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Update continuous release
         uses: softprops/action-gh-release@v2
         with:
