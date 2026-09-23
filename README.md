@@ -33,7 +33,7 @@ Here is the screenshots of the launcher (it's comes from turikhay's official scr
 
 Before installing or building this package, ensure your system meets the following requirements:
 
-- **Linux**: ANY versions, because this is an *Anylinux AppImage*
+- **Linux**: 2.6.17 or later (because the hard dependency on `openat` of sharun, which doesn't have on kernels < 2.6.17)
 - **libc**: ANY, even musl or very old glibc
 - **Architecture**: `x86_64` **ONLY**
 - **Tools**: `jq`, `sha256sum`, `stat`, `wget`, `grep`, `make`, `zsyncmake`, from your distro
