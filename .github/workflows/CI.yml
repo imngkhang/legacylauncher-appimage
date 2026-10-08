@@ -7,6 +7,23 @@ on:
   # Run workflow every day at midnight and on manual trigger
   schedule:
     - cron: "0 0 * * *"  
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - '**/AUTHORS'
+      - '**/.gitignore'
+      - '**/LICENSE'
+      - '**/LICENSE.*'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '**/LICENSE'
+      - '**/LICENSE.*'
   workflow_dispatch: 
 
 jobs:
@@ -119,13 +136,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        
-      # Create a continuous release and upload the AppImage
-      - name: Delete old continuous release
-        run: |
-          gh release delete continuous --yes --cleanup-tag || true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+      # Create a continuous release and upload the AppImage          
       - name: Update continuous release
         uses: softprops/action-gh-release@v2
         with:
@@ -158,3 +169,26 @@ jobs:
             dist/LegacyLauncher-Bootstrap*anylinux*.AppImage*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cleanup old release assets for continuous release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: continuous
+          CURRENT_VER: ${{ needs.check-and-build.outputs.app_version }}
+        run: |
+          set -euo pipefail
+
+          echo "Cleaning up assets for release $RELEASE_TAG (keeping version $CURRENT_VER)"
+
+          asset_names=$(gh release view "$RELEASE_TAG" --json assets --jq '.assets[].name' || true)
+
+          if [ -z "$asset_names" ]; then
+            echo "No assets found for release $RELEASE_TAG"
+            exit 0
+          fi
+
+          for name in $asset_names; do
+            if [[ "$name" == LegacyLauncher-Bootstrap*anylinux*.AppImage* ]] && [[ "$name" != *"$CURRENT_VER"* ]]; then
+              echo "Removing old asset: $name"
+              gh release delete-asset "$RELEASE_TAG" "$name" --yes
+            fi
+          done     
