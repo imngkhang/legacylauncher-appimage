@@ -1,8 +1,8 @@
 name: "Legacy Launcher"
 architectures:
   x86_64:
-    - version: "1.40.3"
-      url: "https://updates.legacylauncher.ru/legacy/bootstrap/09ba7517c8a9b30780ff9a6de230b8905247835ae0da914d66991e2b3b4b6c4e.jar"
-      sha256: "09ba7517c8a9b30780ff9a6de230b8905247835ae0da914d66991e2b3b4b6c4e"
-      size: 11026138
+    - version: "1.40.4"
+      url: "https://updates.llaun.ch/legacy/bootstrap/d1e55b4731ea5b4d939c14d165b20e03ab6a308cd985e93289b8f957a44fe932.jar"
+      sha256: "d1e55b4731ea5b4d939c14d165b20e03ab6a308cd985e93289b8f957a44fe932"
+      size: 11027464
   
